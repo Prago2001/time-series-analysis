@@ -1,21 +1,15 @@
-"""Simple additive seasonal decomposition example (standard library only)."""
+"""Simple additive seasonal decomposition example."""
+import sys
+import os
 
-
-def seasonal_component(data, period):
-    """Estimate an additive seasonal component for the given period."""
-    overall = sum(data) / len(data)
-    seasonal = []
-    for pos in range(period):
-        vals = data[pos::period]
-        seasonal.append(sum(vals) / len(vals) - overall)
-    return [seasonal[i % period] for i in range(len(data))]
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
+from timeseries import seasonal_component
 
 
 def main():
     data = [10, 20, 12, 22, 14, 24]
-    seasonal = seasonal_component(data, 2)
     print("data:", data)
-    print("seasonal:", seasonal)
+    print("seasonal:", seasonal_component(data, 2))
 
 
 if __name__ == "__main__":

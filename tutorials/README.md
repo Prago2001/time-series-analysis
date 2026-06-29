@@ -15,6 +15,9 @@ installing any dependencies.
 | [04 Autocorrelation](04_autocorrelation.md) | Measuring how a series relates to its own past | [examples/autocorrelation.py](examples/autocorrelation.py) |
 | [05 Seasonal Decomposition](05_decomposition.md) | Splitting into trend, seasonal, residual | [examples/decomposition.py](examples/decomposition.py) |
 
+All methods are implemented in [src/timeseries.py](../src/timeseries.py) and the
+examples import them from there.
+
 ## Running the examples
 
 ```bash

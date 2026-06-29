@@ -1,16 +1,15 @@
-"""Differencing example to remove trend (standard library only)."""
+"""Differencing example to remove trend."""
+import sys
+import os
 
-
-def difference(data, lag=1):
-    """Return the lag-differenced series."""
-    return [data[i] - data[i - lag] for i in range(lag, len(data))]
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
+from timeseries import difference
 
 
 def main():
     data = [2, 4, 6, 8, 10]
-    diff = difference(data)
     print("data:", data)
-    print("diff:", diff)
+    print("diff:", difference(data))
 
 
 if __name__ == "__main__":

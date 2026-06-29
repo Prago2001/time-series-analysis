@@ -1,23 +1,15 @@
-"""Moving average smoothing example (standard library only)."""
+"""Moving average smoothing example."""
+import sys
+import os
 
-
-def moving_average(data, window):
-    """Return the simple moving average; first window-1 entries are None."""
-    result = []
-    for i in range(len(data)):
-        if i + 1 < window:
-            result.append(None)
-        else:
-            avg = sum(data[i - window + 1:i + 1]) / window
-            result.append(avg)
-    return result
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
+from timeseries import moving_average
 
 
 def main():
     data = [10, 12, 11, 13, 15, 14, 16]
-    ma = moving_average(data, 3)
     print("data:", data)
-    print("ma(3):", ma)
+    print("ma(3):", moving_average(data, 3))
 
 
 if __name__ == "__main__":

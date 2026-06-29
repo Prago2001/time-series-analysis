@@ -1,15 +1,9 @@
-"""Autocorrelation example (standard library only)."""
+"""Autocorrelation example."""
+import sys
+import os
 
-
-def autocorrelation(data, lag):
-    """Return the autocorrelation at the given lag."""
-    n = len(data)
-    mean = sum(data) / n
-    denom = sum((x - mean) ** 2 for x in data)
-    if denom == 0:
-        return 0.0
-    num = sum((data[t] - mean) * (data[t - lag] - mean) for t in range(lag, n))
-    return num / denom
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "src"))
+from timeseries import autocorrelation
 
 
 def main():
