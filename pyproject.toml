@@ -1,10 +1,10 @@
 [project]
-name = "timeseries-india"
+name = "time-series-library"
 version = "0.1.0"
-description = "Foundational time-series models (ARMA, GARCH, VAR) for Indian-market data"
+description = "Foundational time-series models (ARMA, GARCH, VAR)"
 readme = "README.md"
 license = { file = "LICENSE" }
-keywords = ["time-series", "arma", "garch", "var", "forecasting", "nse", "india"]
+keywords = ["time-series", "arma", "garch", "var", "forecasting"]
 authors = [
     { name = "Pratik Gokhale" }
 ]
@@ -16,15 +16,11 @@ dependencies = [
     "scipy>=1.18.0",
 ]
 
-[project.optional-dependencies]
-live = ["yfinance>=0.2"]
 
 [build-system]
 requires = ["uv_build>=0.11.25,<0.12.0"]
 build-backend = "uv_build"
 
-[tool.uv.build-backend]
-source-include = ["src/timeseries_india/datasets/*.csv"]
 
 [dependency-groups]
 dev = [

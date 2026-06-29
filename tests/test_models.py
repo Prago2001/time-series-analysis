@@ -1,4 +1,4 @@
-"""Tests for the timeseries_india library."""
+"""Tests for the time-series-library."""
 
 from __future__ import annotations
 
@@ -6,8 +6,10 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import timeseries_india as tsi
-from timeseries_india import ARMA, GARCH, VAR, data, utils
+import time_series_library as tsl
+from time_series_library import ARMA, GARCH, VAR, utils
+
+from tests import data
 
 
 # --------------------------------------------------------------------------- #
@@ -199,5 +201,5 @@ def test_var_simulate_shape():
 
 
 def test_package_exports():
-    assert hasattr(tsi, "ARMA")
-    assert tsi.__version__
+    assert hasattr(tsl, "ARMA")
+    assert tsl.__version__

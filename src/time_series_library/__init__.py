@@ -1,19 +1,18 @@
-"""timeseries-india: foundational time-series models for Indian-market data.
+"""time-series-library: foundational time-series models.
 
 A small, dependency-light library (NumPy / pandas / SciPy) implementing the
 core building blocks of applied time-series econometrics:
 
-* :class:`~timeseries_india.arma.ARMA`  — ARMA(p, q) for the conditional mean
-* :class:`~timeseries_india.garch.GARCH` — GARCH(p, q) for conditional variance
-* :class:`~timeseries_india.var.VAR`    — Vector autoregression with IRFs
+* :class:`~time_series_library.arma.ARMA`  — ARMA(p, q) for the conditional mean
+* :class:`~time_series_library.garch.GARCH` — GARCH(p, q) for conditional variance
+* :class:`~time_series_library.var.VAR`    — Vector autoregression with IRFs
 
-plus diagnostics (ACF/PACF, Ljung-Box), accuracy metrics and a bundled
-synthetic NSE dataset (with an optional live ``yfinance`` loader).
+plus diagnostics (ACF/PACF, Ljung-Box) and accuracy metrics.
 """
 
 from __future__ import annotations
 
-from . import data, utils
+from . import utils
 from .arma import ARMA, ARMAResults
 from .garch import GARCH, GARCHResults
 from .utils import acf, ljung_box, log_returns, mae, mape, pacf, rmse
@@ -28,7 +27,6 @@ __all__ = [
     "GARCHResults",
     "VAR",
     "VARResults",
-    "data",
     "utils",
     "acf",
     "pacf",

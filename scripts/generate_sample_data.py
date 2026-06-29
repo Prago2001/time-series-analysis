@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 SEED = 20240101
-OUT_DIR = Path(__file__).resolve().parents[1] / "src" / "timeseries_india" / "datasets"
+OUT_DIR = Path(__file__).resolve().parents[1] / "tests" / "datasets"
 
 
 def garch_returns(rng, n, mu_annual, vol_annual, alpha, beta, jump_p=0.0):

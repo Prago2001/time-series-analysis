@@ -1,6 +1,6 @@
 # VAR Models — Multivariate Dynamics and Impulse Responses
 
-> Tutorial for `timeseries_india.VAR`. Prerequisites: the ARMA tutorial and
+> Tutorial for `time_series_library.VAR`. Prerequisites: the ARMA tutorial and
 > comfort with matrix algebra.
 
 ## 1. Motivation
@@ -51,7 +51,8 @@ $$
 $$
 
 ```python
-from timeseries_india import VAR, utils, data
+from time_series_library import VAR, utils
+from tests import data  # sample dataset for testing
 prices = data.load_nse_prices(["NIFTY50", "RELIANCE", "TCS"])
 rets = prices.apply(utils.log_returns, axis=0, result_type="expand").T  # or build a returns frame
 res = VAR(p=2).fit(rets)

@@ -1,9 +1,10 @@
-# timeseries-india
+# time-series-library
 
 A compact, well-documented library of **foundational time-series models** —
 `ARMA`, `GARCH` and `VAR` — implemented from first principles on top of
 **NumPy / pandas / SciPy**, together with graduate-level tutorials and an
-interactive Jupyter notebook applied to **Indian-market (NSE) data**.
+interactive Jupyter notebook. The Indian-market (NSE) data is used only
+as a sample dataset for testing.
 
 The goal is technical rigour with readable code: every model is estimated by
 (quasi-)maximum likelihood or OLS, exposes forecasts with uncertainty bands, and
@@ -23,10 +24,10 @@ comes with the diagnostics needed to use it responsibly.
 `acf`, `pacf` (Durbin–Levinson), `ljung_box` test, RMSE/MAE/MAPE,
 chronological train/test split.
 
-**Data** (`data.py`): a bundled **synthetic NSE dataset** (daily prices for
+**Test data** (`tests/data.py`): a **synthetic NSE dataset** (daily prices for
 `NIFTY50`, `RELIANCE`, `TCS`, `HDFCBANK`, `INFY` over 2018–2023, plus a monthly
-mutual-fund NAV series) so everything runs **offline and reproducibly**. An
-optional `download_nse(...)` loader fetches live data via `yfinance`.
+mutual-fund NAV series), used only for testing. An optional `download_nse(...)`
+loader fetches live data via `yfinance`.
 
 > **About the bundled data.** The sample series are *simulated* (no live network
 > needed) but calibrated to the empirical behaviour of Indian equities: positive
@@ -44,7 +45,6 @@ dependency management.
 ```bash
 # from the repository root
 uv sync                 # create the venv and install core dependencies
-uv sync --extra live    # also install yfinance for live NSE downloads (optional)
 ```
 
 Run anything inside the managed environment with `uv run`, e.g. `uv run python`,
@@ -56,8 +56,9 @@ Run anything inside the managed environment with `uv run`, e.g. `uv run python`,
 
 ```python
 import numpy as np
-import timeseries_india as tsi
-from timeseries_india import ARMA, GARCH, VAR, data, utils
+import time_series_library as tsl
+from time_series_library import ARMA, GARCH, VAR, utils
+from tests import data  # sample dataset for testing
 
 # 1. Load bundled NSE prices and compute daily log-returns (in %).
 prices  = data.load_nse_prices(["NIFTY50", "RELIANCE", "TCS"])
@@ -78,7 +79,7 @@ var = VAR(p=2).fit(returns)
 irf = var.impulse_response(h=20, orthogonalized=True)   # (h+1, k, k)
 ```
 
-Using **live data** instead (requires `uv sync --extra live` and internet):
+Using **live data** instead (requires internet):
 
 ```python
 prices = data.download_nse(["RELIANCE", "TCS"], start="2020-01-01")
@@ -89,14 +90,12 @@ prices = data.download_nse(["RELIANCE", "TCS"], start="2020-01-01")
 ## Repository layout
 
 ```
-src/timeseries_india/
+src/time_series_library/
 ├── __init__.py        # public API
 ├── arma.py            # ARMA(p, q)  — conditional mean
 ├── garch.py           # GARCH(p, q) — conditional variance
 ├── var.py             # VAR(p)      — multivariate + IRFs
-├── utils.py           # ACF/PACF, Ljung-Box, metrics, transforms
-├── data.py            # bundled + live (yfinance) data loaders
-└── datasets/          # bundled synthetic NSE CSVs
+└── utils.py           # ACF/PACF, Ljung-Box, metrics, transforms
 tutorials/
 ├── 01_arma.md         # ARMA: theory, identification, estimation, forecasting
 ├── 02_garch.md        # GARCH: stylised facts, ML estimation, volatility forecasts
@@ -104,6 +103,8 @@ tutorials/
 notebooks/
 └── demo.ipynb         # end-to-end walkthrough on Indian-market data
 tests/
+├── data.py            # sample NSE dataset loaders (+ optional yfinance)
+├── datasets/          # synthetic NSE CSVs (test data)
 └── test_models.py     # parameter-recovery & behavioural tests
 ```
 
@@ -166,7 +167,7 @@ ordering**.
 ## Roadmap
 
 - [x] ARMA, GARCH, VAR with forecasting, simulation and diagnostics
-- [x] Bundled Indian-market dataset + optional live loader
+- [x] Indian-market sample dataset for testing + optional live loader
 - [x] Tutorials and an end-to-end notebook
 - [ ] ARIMA / seasonal differencing
 - [ ] Asymmetric GARCH (EGARCH, GJR) and Student-t innovations

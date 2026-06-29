@@ -1,6 +1,6 @@
 # ARMA Models — Modelling the Conditional Mean
 
-> Tutorial for `timeseries_india.ARMA`. Prerequisites: basic probability,
+> Tutorial for `time_series_library.ARMA`. Prerequisites: basic probability,
 > linear algebra and the idea of a stochastic process.
 
 ## 1. Motivation
@@ -56,7 +56,8 @@ Before fitting, the classical **Box–Jenkins** workflow inspects two functions:
 | **PACF** $\alpha_k$ | **cuts off** after lag $p$ | tails off | tails off |
 
 ```python
-from timeseries_india import utils, data
+from time_series_library import utils
+from tests import data  # sample dataset for testing
 r = utils.log_returns(data.load_nse_prices("NIFTY50").squeeze())
 utils.acf(r, 20)    # autocorrelations
 utils.pacf(r, 20)   # partial autocorrelations
@@ -67,7 +68,7 @@ orders.
 
 ## 4. Estimation
 
-`timeseries_india` estimates parameters by **conditional maximum likelihood**,
+`time_series_library` estimates parameters by **conditional maximum likelihood**,
 equivalently **conditional sum of squares (CSS)**. Conditioning on the first $p$
 observations and on $\varepsilon_t = 0$ for $t \le 0$, the residuals are computed
 by the recursion
@@ -89,7 +90,7 @@ objective in $(\mu,\phi,\theta)$ that we minimise with L-BFGS-B (coefficients
 box-constrained for numerical stability).
 
 ```python
-from timeseries_india import ARMA
+from time_series_library import ARMA
 res = ARMA(p=2, q=1).fit(r)
 print(res.summary())          # coefficients, log-lik, AIC, BIC
 ```

@@ -1,6 +1,6 @@
 # GARCH Models — Modelling Time-Varying Volatility
 
-> Tutorial for `timeseries_india.GARCH`. Prerequisites: the ARMA tutorial and
+> Tutorial for `time_series_library.GARCH`. Prerequisites: the ARMA tutorial and
 > the notion of conditional variance.
 
 ## 1. The stylised facts of returns
@@ -85,13 +85,14 @@ $$
         + \frac{\varepsilon_t^2}{\sigma_t^2}\right].
 $$
 
-`timeseries_india` maximises this with L-BFGS-B subject to the positivity and
+`time_series_library` maximises this with L-BFGS-B subject to the positivity and
 stationarity constraints. Because the recursion uses *past* information only,
 the likelihood factorises cleanly. Even when $z_t$ is non-normal, maximising the
 Gaussian likelihood is a **consistent quasi-MLE (QMLE)**.
 
 ```python
-from timeseries_india import GARCH, utils, data
+from time_series_library import GARCH, utils
+from tests import data  # sample dataset for testing
 r = utils.log_returns(data.load_nse_prices("RELIANCE").squeeze())
 res = GARCH(p=1, q=1).fit(r)
 print(res.summary())
