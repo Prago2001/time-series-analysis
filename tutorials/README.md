@@ -15,6 +15,18 @@ installing any dependencies.
 | [04 Autocorrelation](04_autocorrelation.md) | Measuring how a series relates to its own past | [examples/autocorrelation.py](examples/autocorrelation.py) |
 | [05 Seasonal Decomposition](05_decomposition.md) | Splitting into trend, seasonal, residual | [examples/decomposition.py](examples/decomposition.py) |
 
+## Modelling Notebooks
+
+Interactive Jupyter notebooks that demonstrate fitting popular time-series
+models on open-source datasets while using the library's helper functions for
+data exploration.
+
+| Notebook | Model | Dataset |
+| --- | --- | --- |
+| [06 ARMA Model](06_ARMA_model.ipynb) | ARMA (via `statsmodels`) | Mauna Loa CO2 (`statsmodels`) |
+| [07 GARCH Model](07_GARCH_model.ipynb) | GARCH (via `arch`) | S&P 500 daily returns (`arch`) |
+| [08 VAR Model](08_VAR_model.ipynb) | VAR (via `statsmodels`) | US macroeconomic data (`statsmodels`) |
+
 All methods are implemented in [src/timeseries.py](../src/timeseries.py) and the
 examples import them from there.
 
@@ -26,4 +38,11 @@ python tutorials/examples/exponential_smoothing.py
 python tutorials/examples/differencing.py
 python tutorials/examples/autocorrelation.py
 python tutorials/examples/decomposition.py
+```
+
+## Running the notebooks
+
+```bash
+pip install -r requirements.txt
+jupyter notebook tutorials/
 ```
