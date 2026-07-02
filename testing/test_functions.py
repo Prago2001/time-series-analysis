@@ -11,6 +11,9 @@ from timeseries import (
     difference,
     autocorrelation,
     seasonal_component,
+    ARMAModel,
+    GARCHModel,
+    VARModel,
 )
 from sample_data import (
     RELIANCE_MONTHLY,
@@ -19,6 +22,7 @@ from sample_data import (
     SBI_BLUECHIP_NAV,
     RELIANCE_DAILY,
 )
+import numpy as np
 
 
 def test_moving_average_reliance():
@@ -123,6 +127,85 @@ def test_empty_data():
     print("✓ Empty data edge case passed")
 
 
+def test_arma_fit_forecast():
+    """Test ARMA model fit and forecast on differenced Reliance data."""
+    diff = difference(RELIANCE_MONTHLY)
+    model = ARMAModel(p=1, q=1)
+    model.fit(diff)
+    assert model._fitted
+    fc = model.forecast(steps=3)
+    assert len(fc) == 3
+    # Forecasts should be finite numbers
+    for v in fc:
+        assert np.isfinite(v)
+    print("✓ ARMA fit & forecast (Reliance differenced) passed")
+
+
+def test_arma_residuals():
+    """Test that ARMA residuals have length equal to input."""
+    diff = difference(NIFTY50_MONTHLY)
+    model = ARMAModel(p=2, q=1)
+    model.fit(diff)
+    assert len(model.residuals) == len(diff)
+    print("✓ ARMA residuals length check passed")
+
+
+def test_garch_fit_forecast():
+    """Test GARCH model fit and forecast on Reliance daily returns."""
+    prices = np.array(RELIANCE_DAILY)
+    returns = ((prices[1:] - prices[:-1]) / prices[:-1] * 100).tolist()
+    model = GARCHModel(p=1, q=1)
+    model.fit(returns)
+    assert model._fitted
+    assert len(model.conditional_volatility) == len(returns)
+    fc = model.forecast(steps=5)
+    assert len(fc["variance"]) == 5
+    assert len(fc["volatility"]) == 5
+    for v in fc["variance"]:
+        assert v > 0
+    print("✓ GARCH fit & forecast (Reliance daily returns) passed")
+
+
+def test_garch_volatility_positive():
+    """Test that GARCH conditional volatility is always positive."""
+    prices = np.array(RELIANCE_DAILY)
+    returns = ((prices[1:] - prices[:-1]) / prices[:-1] * 100).tolist()
+    model = GARCHModel(p=1, q=1)
+    model.fit(returns)
+    for v in model.conditional_volatility:
+        assert v > 0
+    print("✓ GARCH conditional volatility positivity passed")
+
+
+def test_var_fit_forecast():
+    """Test VAR model fit and forecast on multivariate stock data."""
+    # Use differenced series of three stocks
+    r_diff = difference(RELIANCE_MONTHLY)
+    t_diff = difference(TCS_MONTHLY)
+    n_diff = difference(NIFTY50_MONTHLY)
+    data = np.column_stack([r_diff, t_diff, n_diff])
+    model = VARModel(p=1)
+    model.fit(data)
+    assert model._fitted
+    fc = model.forecast(steps=3)
+    assert fc.shape == (3, 3)
+    assert np.all(np.isfinite(fc))
+    print("✓ VAR fit & forecast (3-variable) passed")
+
+
+def test_var_coefficients_shape():
+    """Test that VAR coefficient matrices have correct shape."""
+    r_diff = difference(RELIANCE_MONTHLY)
+    t_diff = difference(TCS_MONTHLY)
+    data = np.column_stack([r_diff, t_diff])
+    model = VARModel(p=2)
+    model.fit(data)
+    assert len(model.coefficients) == 2
+    for mat in model.coefficients:
+        assert mat.shape == (2, 2)
+    print("✓ VAR coefficient shapes (K=2, p=2) passed")
+
+
 def run_all_tests():
     """Run all tests."""
     print("=" * 60)
@@ -141,6 +224,12 @@ def run_all_tests():
     test_seasonal_nifty()
     test_seasonal_mutual_fund()
     test_empty_data()
+    test_arma_fit_forecast()
+    test_arma_residuals()
+    test_garch_fit_forecast()
+    test_garch_volatility_positive()
+    test_var_fit_forecast()
+    test_var_coefficients_shape()
 
     print()
     print("=" * 60)
